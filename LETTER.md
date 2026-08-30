@@ -1,203 +1,154 @@
-# 🥚 A Letter to the Big Guys
+🥚 A small letter for the Big Guys
 
-## 🪟 Microsoft
+From the official bedroom headquarters of EggOS.
 
-Hey Microsoft.
 
-Windows is impressive.
 
-But sometimes it feels less like an operating system and more like **an operating system with a marketing department permanently attached to it.** 💀
+🪟 Microsoft
 
-Telemetry and privacy concerns, bloat, ads, cloud pushing, account requirements, and old features disappearing or getting replaced...
+Windows is not an operating system. It is a store that happens to boot.
 
-Bro, I asked for a computer.
+I turn on my PC and the first thing it does is advertise to me. On hardware I already paid for. That is not a feature. That is a street performer who followed me home.
 
-**Not a subscription ecosystem.**
+The Start menu is a mall. Search is a salesman. Settings is two apps wearing the same nametag, giving different directions, then blaming me when I get lost.
 
-> **I installed an operating system, not a salesman.**
+I asked for Calculator. Windows heard “please recommend Copilot, OneDrive, Edge, a Microsoft account, and a restart in 12 minutes.”
 
----
+Telemetry knows what I clicked, when I clicked it, and probably how I feel about the weather widget. Privacy settings exist so you can feel like you did something while the vacuum is still on.
 
-## 🤖 Android / Google
+Old features do not get removed. They get “reimagined,” which means worse, slower, and now it wants an account.
 
-Hey Android.
+You did not ship an OS. You shipped a loyalty program with a taskbar.
 
-You started with a pretty damn good idea:
+EggOS will have windows. It will not have a pitch deck inside them.
 
-**A mobile platform with freedom.**
 
-Then came the bloat.
 
-Then more restrictions.
+🤖 Android / Google
 
-Then increasingly centralized app distribution.
+Android started as “a phone you can actually own.” Then Google looked at that sentence like it was a bug.
 
-Then more developer requirements and verification.
+Freedom got patched. Sideloading got a warning label, then another warning label, then a form, then a pep talk about safety.
 
-And now we're looking at even more control over how developers distribute their own software.
+Security matters. Using security as the excuse to decide what software I am allowed to run on a phone I bought is not security. That is a landlord energy.
 
-I understand the argument:
+The welcome screen lasts four seconds. The account lasts forever.
 
-**“It's for security.”**
+I wanted a camera and a browser. I got twelve Google apps, three of which think they are the messaging app, and a search page that hides the actual website under shopping, summaries, and a paragraph that did not answer the question.
 
-Cool.
+Play Store is not a store anymore. It is airport security for apps. Your own app is the suspicious suitcase.
 
-Security matters.
+If I own the phone, I am the admin. That should not be a radical opinion. That should be the default.
 
-But security shouldn't automatically mean:
+Keep the platform. I am building the option that remembers who paid for the device.
 
-> **“The company controlling the platform gets to decide what software you can run.”**
 
-If I own the phone, **I should have meaningful control over it.**
 
-So Android, keep doing your thing.
+🍎 Apple
 
-I'm building another option.
+Apple products are pretty. Apple prices are a jump scare.
 
----
+The aluminum is perfect. The software is smooth. The ecosystem is so polished you do not notice the lock until you try to leave.
 
-## 🍎 Apple
+“It just works” is the slogan. The fine print is “it just works if you already own the rest of the family.”
 
-Hey Apple.
+Walled garden? Cute name. It is a penthouse with no stairs and a $29 cable that only talks to other $29 cables.
 
-Your hardware is polished.
+Repairability is treated like a rumor. The battery is “part of the design.” The design is part of the brand. The brand is part of why a cracked screen costs more than a used laptop.
 
-Your software is polished.
+I do not hate the hardware. I hate that buying it feels like signing a roommate agreement with a corporation.
 
-Your ecosystem is polished.
+Nice garden. EggOS is a backyard. The gate opens. That is the point.
 
-Your prices are also polished.
 
-**Polished until my wallet disappears.** 💸💀
 
-And that walled garden?
+🏹 Arch Linux
 
-Beautiful garden.
+Arch, I like you. That is why this one hurts.
 
-**Where's the damn gate?**
+Pacman is clean. The wiki is actually good. The install makes you feel like you built a computer with your bare hands and a text file.
 
-I don't hate Apple.
+Then the comments section arrives.
 
-I just don't want my hardware ownership to come with a giant list of rules.
+Beginner: “How do I connect to Wi-Fi?” Reply 1: “Read the wiki.” Reply 2: “Skill issue.” Reply 3: a kernel lecture. Reply 4: “I use Arch, by the way.”
 
-> **Nice garden. I prefer having a gate I can open myself.**
+That last one is not information. That is a mating call.
 
----
+Not every Arch user is like this. The helpful ones are the only reason the stereotype has survivors. The unhelpful ones treat Linux like a secret club and the wiki like scripture you should already have memorized.
 
-## 🏹 Arch Linux
+Arch is an operating system. It is not a belt rank. It is not a personality. It is not a reason to be rude to someone who just wants the internet.
 
-Hey Arch.
+EggOS docs will explain the thing. Then the words in the thing. Then an example that does not start with “simply.”
 
-I love you.
 
-Seriously.
 
-You're lightweight, ridiculously configurable, and `pacman` is beautiful.
+🐧 Linux / Linus
 
-But sometimes your community has the energy of:
+Linus, the kernel is the reason half the planet’s computers even remember how to computer.
 
-> **“You don't know Linux? Skill issue.”** 💀
+It is also about to get egg on it. Sorry.
 
-New user asks a question:
+Linux is powerful, free, customizable, and present in everything from supercomputers to devices that should not have been given a kernel and a sense of destiny.
 
-**“Read the wiki.”**
+The desktop is great until two apps start arguing about file pickers, dark mode, and whether a system tray is civilization.
 
-New user reads the wiki.
+There are 400 ways to install a package. There are 401 blog posts explaining why the other 399 are wrong. All of them work on someone else’s machine.
 
-New user asks what something means:
+I will follow the license. I will keep the notices. I will give credit.
 
-**“RTFM.”**
+I will also name something important after an egg. That is the deal.
 
-Bro. 😭
+If it panics, my fault. If it boots, thank you for the homework. I copied it legally.
 
-Obviously, not every Arch user is like this. There are tons of helpful Arch users.
 
-But the stereotype exists for a reason.
 
-> **Arch is an operating system, not a personality test.**
+🚀 NASA
 
----
+NASA writes software that has to work when the nearest technician is on Earth and the nearest reset button is a mission failure.
 
-## 🐧 Linux / Linus
+EggOS is being written on a bed next to a snack.
 
-Hey Linus.
+That is not a comparison. That is a warning label.
 
-Linux is awesome.
+Your open source projects are actually cool. If EggOS borrows anything, the license stays, the names stay, and the comment will say this part was written by people who do not engineer from a blanket fort.
 
-Open source, powerful, ridiculously customizable, and everywhere.
+You put code in space. I am trying to put text on a screen without the machine sobbing.
 
-Unfortunately...
+Different leagues. Same respect. Very different snacks.
 
-**I'm probably going to butcher some of your kernel code for EggOS.** 😭
 
-I'll follow the license.
 
-I'll preserve the required notices.
+🥚 Limine
 
-I'll give credit.
+Limine, you are a bootloader. You do not have a keynote. You do not have a “recommended” panel. You do not ask me to sign in to start the computer.
 
-But yeah...
+You wake the machine up and hand over the keys. That is the whole job. You do it so well that EggOS hired you first and asked questions never.
 
-> **Your kernel is about to get eggified.** 🥚
+No slides. No account. No “discover new features.” Just boot.
 
-Sorry in advance.
+If we modify your code, the copyright stays. If the computer fails to wake up, do not look at Limine. Look at the egg.
 
----
+You handle the boot. I handle the bad decisions.
 
-## 🚀 NASA
 
-Hey NASA.
 
-You build software for **spacecraft**.
+🥚 Closing Set
 
-I'm building an operating system while sitting on my bed.
+Microsoft: my desktop is not a billboard. Stop treating the taskbar like ad space.
 
-I think we know who has the more questionable engineering strategy here. 💀
+Google: security is not a synonym for “we decide what runs.” I bought the phone.
 
-Seriously though, your open-source projects are ridiculously cool.
+Apple: the garden is pretty. The lock is the problem. Also the prices. Mostly the lock. Also the prices.
 
-If EggOS incorporates or adapts your software, I'll follow the applicable licenses and give proper credit.
+Arch: the wiki is a guide, not a personality test. Help the new person. Do not grade them.
 
-> **If NASA can send software to space, I can at least make mine boot.** 🚀🥚
+Linux: thanks for the kernel. Sorry about the eggification. It is legal. It is still embarrassing.
 
----
+NASA: your code has a higher chance of surviving than mine. That is fine. I am not going to space. I am going to boot.
 
-## 🥚 Limine
+Limine: please start the computer. That is the entire review.
 
-Hey Limine.
+EggOS: No ads. No account wall. No sacred forum reply. No store following me from boot to shutdown.
 
-You're a bootloader.
+Just a machine that belongs to the person sitting in front of it.
 
-Your job is basically:
-
-**“Wake up the computer and give the OS what it needs.”**
-
-And somehow you became one of the first things EggOS decided to borrow. 😭
-
-Thanks for handling the annoying bootloader stuff while I figure out the rest of the OS.
-
-If EggOS incorporates or modifies Limine code, the applicable licenses and copyright notices will be preserved.
-
-> **You handle the boot. I'll handle the egg.** 🥚
-
----
-
-# 🥚 Final Words
-
-Microsoft: **Stop turning my desktop into an advertisement.**
-
-Google: **Let people control the software on their own phones.**
-
-Apple: **Please stop eating everyone's wallet.**
-
-Arch: **Please stop telling beginners to read the wiki like it's a sacred text.**
-
-Linux: **I'm stealing your homework, but legally.**
-
-NASA: **Your spacecraft code is cooler than my entire OS.**
-
-Limine: **Please boot my damn computer.**
-
-And EggOS?
-
-**I'm just trying to build an OS without losing my sanity.** 💀🥚
