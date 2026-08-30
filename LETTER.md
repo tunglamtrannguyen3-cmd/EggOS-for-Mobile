@@ -284,18 +284,35 @@ No store following me from boot to shutdown.
 Just a machine that belongs to the person sitting in front of it.
 
 ```text
-  ,ggggggggggg,
- dP"""88""""""Y8b
- Yb,  88       `8b    EggOS
-  `"  88        88    bedroom build
-      88        88    questionable strategy
-      88        88    mandatory egg
-      88        88
-      88        88
-      88        Y8
-      88       ,8P
-      88______,dP
-      88888888P"
+                                                                 
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                              ████                              
+                            ██░░░░██                            
+                          ██░░░░░░░░██                          
+                          ██░░░░░░░░██                          
+                        ██░░░░░░░░░░░░██                        
+                        ██░░░░░░░░░░░░██                        
+                        ██░░░░░░░░░░░░██                        
+                          ██░░░░░░░░██                          
+                            ████████                            
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+
 ```
 
 *— sent from a bed, not a spaceship*
