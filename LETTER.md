@@ -13,7 +13,6 @@
 | Arch | Wiki as a personality | Help the beginner |
 | Linux | About to get eggified | Legal. Still embarrassing. |
 | NASA | Outclasses the entire project | Respected from a bed |
-| Limine | Actually boots the machine | Hired first |
 
 ---
 
@@ -230,36 +229,6 @@ I am trying to put text on a screen without the machine sobbing.
 
 ---
 
-## 🥚 Limine
-
-Limine, you are a bootloader.
-
-You do not have a keynote.  
-You do not have a “recommended” panel.  
-You do not ask me to sign in to start the computer.
-
-You wake the machine up and hand over the keys.  
-That is the whole job.
-
-You do it so well that EggOS hired you first and asked questions never.
-
-```text
-[Limine]
-  no slides
-  no account
-  no "discover new features"
-  just boot
-```
-
-If we modify your code, the copyright stays.  
-If the computer fails to wake up, do not look at Limine.  
-Look at the egg.
-
-> You handle the boot.  
-> I handle the bad decisions.
-
----
-
 ## 🥚 Closing Set
 
 | Company | The line |
@@ -270,7 +239,6 @@ Look at the egg.
 | **Arch** | The wiki is a guide, not a personality test. Help the new person. Do not grade them. |
 | **Linux** | Thanks for the kernel. Sorry about the eggification. It is legal. It is still embarrassing. |
 | **NASA** | Your code has a higher chance of surviving than mine. That is fine. I am not going to space. I am going to boot. |
-| **Limine** | Please start the computer. That is the entire review. |
 
 ---
 
