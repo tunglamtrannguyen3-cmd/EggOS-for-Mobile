@@ -26,7 +26,6 @@ EggOS may incorporate or adapt existing open-source projects when writing everyt
 
 Current projects/components I'm looking at include:
 
-* **Limine** — bootloader
 * **NASA projects** — software/components for possible integration
 * **Linux kernel** — selected code or concepts where appropriate
 
