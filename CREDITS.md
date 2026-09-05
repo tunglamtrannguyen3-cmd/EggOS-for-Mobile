@@ -4,20 +4,6 @@ EggOS builds upon the work of amazing open-source projects. All code is reused i
 
 ---
 
-## Bootloader: Limine
-
-**Source:** https://github.com/Limine-Bootloader/Limine  
-**License:** BSD 2-Clause  
-**Usage:** ARM64 UEFI boot protocol inspiration, boot concepts
-
-Limine bootloader is a minimal, modern bootloader targeting the Limine Boot Protocol. While Limine primarily targets x86-64, its boot protocol design and specification inform EggOS's ARM64 bootloader implementation.
-
-**How we use it:**
-- Boot protocol concepts (boot info structure)
-- Modular boot architecture philosophy
-- Device tree handling patterns
-
----
 
 ## Operating System Concepts: NASA Core Flight System (cFS)
 
