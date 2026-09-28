@@ -20,21 +20,6 @@ So instead of just complaining about it...
 
 **I decided to make an OS.**
 
-## 🧑‍💻 Credits & Borrowed Code
-
-EggOS may incorporate or adapt existing open-source projects when writing everything from scratch would be impractical.
-
-Current projects/components I'm looking at include:
-
-* **NASA projects** — software/components for possible integration
-* **Linux kernel** — selected code or concepts where appropriate
-
-And yes, **Linus, I'm probably going to butcher some Linux kernel code for EggOS.** 😭
-
-More credits will be added as the project grows.
-
-All reused code will remain subject to its original license.
-
 ## 🛠️ Planned Direction
 
 EggOS is intended to eventually support:
