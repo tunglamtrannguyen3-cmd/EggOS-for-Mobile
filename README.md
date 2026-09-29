@@ -6,7 +6,7 @@ There's also a PC version planned, but I'm currently too lazy to work on it. �
 
 ## 🚀 Development
 
-Development is planned to start on **September 13, 2026**, when my GitHub Copilot limit resets.
+Development is planned to start on **October 13, 2026**, when my GitHub Copilot limit resets.
 
 Whether I actually have enough discipline to finish it is another question. 💀
 
