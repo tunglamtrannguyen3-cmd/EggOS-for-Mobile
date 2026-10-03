@@ -5,6 +5,13 @@ version = 4
 [[package]]
 name = "boot"
 version = "0.1.0"
+dependencies = [
+ "drivers",
+]
+
+[[package]]
+name = "drivers"
+version = "0.1.0"
 
 [[package]]
 name = "guest"

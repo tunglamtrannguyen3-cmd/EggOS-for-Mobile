@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "main", "master" ]
   pull_request:
-  workflow_dispatch: # Allows you to trigger builds manually
+  workflow_dispatch:
 
 jobs:
   build:
@@ -17,7 +17,9 @@ jobs:
     - name: Install Toolchains (Ada & Binutils)
       run: |
         sudo apt-get update
-        sudo apt-get install -y gnat gprbuild binutils-aarch64-linux-gnu
+        sudo apt-get install -y \
+          gnat gprbuild binutils-aarch64-linux-gnu \
+          libgnat-13 libgnat-13-dev
 
     - name: Install Rust Toolchain
       uses: dtolnay/rust-toolchain@stable
