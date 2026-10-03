@@ -1,0 +1,17 @@
+[workspace]
+members = [
+    "boot",
+    "hypervisor",
+    "guest"
+]
+resolver = "2"
+
+[profile.dev]
+panic = "abort" # Bare-metal requires abort on panic (no stdlib unwinding)
+
+[profile.release]
+opt-level = "z"      # Optimize for size
+lto = true           # Link-time optimization
+panic = "abort"
+strip = true         # Strip debug symbols for the final binary
+codegen-units = 1    # Maximize optimization at the cost of compile time

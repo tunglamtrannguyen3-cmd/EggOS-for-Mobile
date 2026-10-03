@@ -1,0 +1,10 @@
+project EggOS is
+   -- Tell the language server where to find Ada files
+   for Source_Dirs use ("hypervisor/safety");
+   for Object_Dir use "build/obj";
+
+   package Compiler is
+      -- Use bare-metal flags (no standard library, suppress runtime checks for now)
+      for Default_Switches ("Ada") use ("-O2", "-gnatp", "-nostdinc");
+   end Compiler;
+end EggOS;
