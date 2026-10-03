@@ -19,8 +19,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gnat gprbuild binutils-aarch64-linux-gnu
 
-      - name: Install Rust Toolchain
-        uses: dtolnay/rust-toolchain@stable
+      - name: Install Rust Nightly Toolchain
+        uses: dtolnay/rust-toolchain@nightly
         with:
           targets: aarch64-unknown-none
 
