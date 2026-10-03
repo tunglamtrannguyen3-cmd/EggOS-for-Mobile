@@ -17,7 +17,7 @@ jobs:
       - name: Install Toolchains (Ada & Binutils)
         run: |
           sudo apt-get update
-          sudo apt-get install -y gnat gprbuild gnat-aarch64-linux-gnu binutils-aarch64-linux-gnu
+          sudo apt-get install -y gnat gprbuild gnat-13-aarch64-linux-gnu binutils-aarch64-linux-gnu
 
       - name: Install Rust Nightly Toolchain
         uses: dtolnay/rust-toolchain@nightly
