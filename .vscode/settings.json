@@ -1,1 +1,4 @@
-{"ada.projectFile": "eggos.gpr"}
+{
+  "ada.projectFile": "eggos.gpr",
+  "rust-analyzer.check.allTargets": false
+}

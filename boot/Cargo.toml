@@ -6,3 +6,4 @@ edition = "2021"
 [[bin]]
 name = "boot"
 path = "bootloader.rs"
+harness = false

@@ -6,3 +6,4 @@ edition = "2021"
 [[bin]]
 name = "hypervisor"
 path = "core/main.rs"
+harness = false

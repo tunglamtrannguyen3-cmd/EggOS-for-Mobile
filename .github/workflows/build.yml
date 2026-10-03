@@ -1,0 +1,35 @@
+name: Build EggOS
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+  workflow_dispatch: # Allows you to trigger builds manually
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Install Toolchains (Ada & Binutils)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gnat gprbuild binutils-aarch64-linux-gnu
+
+    - name: Install Rust Toolchain
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: aarch64-unknown-none
+
+    - name: Build EggOS
+      run: make CROSS_COMPILE=aarch64-linux-gnu-
+
+    - name: Upload Raw Binary
+      uses: actions/upload-artifact@v4
+      with:
+        name: eggos-binary
+        path: build/eggos.bin
+        if-no-files-found: error
