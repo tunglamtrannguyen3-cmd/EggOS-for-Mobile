@@ -17,8 +17,7 @@ asm:
 
 # 2. Compile Ada/SPARK security verification code
 ada:
-	gprbuild -P eggos.gpr
-
+	gprbuild --target=aarch64-linux-gnu -P eggos.gpr
 # 3. Build Rust crates
 rust:
 	cargo build --target $(TARGET_TRIPLE) --release
