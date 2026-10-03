@@ -14,8 +14,11 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    - name: Install Toolchains (Ada & Binutils)
+        - name: Install Toolchains (Ada & Binutils)
       run: |
+        sudo apt-get update
+        sudo apt-get install -y software-properties-common
+        sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
         sudo apt-get update
         sudo apt-get install -y \
           gnat gprbuild binutils-aarch64-linux-gnu \
