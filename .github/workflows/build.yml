@@ -2,7 +2,7 @@ name: Build EggOS
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: ["main", "master"]
   pull_request:
   workflow_dispatch:
 
@@ -14,10 +14,15 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install Toolchains (Ada & Binutils)
+      - name: Install cross toolchains
         run: |
+          set -eux
           sudo apt-get update
-          sudo apt-get install -y gnat gprbuild gcc-aarch64-none-elf binutils-aarch64-none-elf gnat-13-aarch64-none-elf
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+            build-essential \
+            gnat gprbuild \
+            gcc-aarch64-none-elf \
+            binutils-aarch64-none-elf
 
       - name: Install Rust Nightly Toolchain
         uses: dtolnay/rust-toolchain@nightly
@@ -25,7 +30,11 @@ jobs:
           targets: aarch64-unknown-none
 
       - name: Build EggOS
-        run: make CROSS_COMPILE=aarch64-none-elf-
+        run: |
+          set -eux
+          make CROSS_COMPILE=aarch64-none-elf- -j"$(nproc)"
+          ls -l build
+          test -f build/eggos.bin
 
       - name: Upload Raw Binary
         uses: actions/upload-artifact@v4
