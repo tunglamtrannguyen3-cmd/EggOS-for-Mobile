@@ -85,7 +85,7 @@ at_el2:
     cbz     x0, no_elab
     blr     x0
 no_elab:
-    bl      bootloader_main
+    bl      ada_bootloader_main
     ldr     x0, =adafinal
     cbz     x0, halt
     blr     x0

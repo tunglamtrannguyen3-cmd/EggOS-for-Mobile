@@ -1,0 +1,9 @@
+name = "eggos"
+description = "Bare-metal mobile operating system with Ada/SPARK safety components"
+version = "0.1.0"
+licenses = ["custom-EOPL"]
+authors = ["Eggchese <tunglamtrannguyen3@gmail.com>"]
+maintainers = ["Eggchese <tunglamtrannguyen3@gmail.com>"]
+website = "https://github.com/tunglamtrannguyen3-cmd/EggOS-for-Mobile"
+tags = ["embedded", "os", "aarch64", "bare-metal"]
+project-files = ["eggos.gpr"]
