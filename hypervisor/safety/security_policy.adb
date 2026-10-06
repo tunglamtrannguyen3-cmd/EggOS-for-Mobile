@@ -1,13 +1,18 @@
-package body Security_Policy with SPARK_Mode => On is
+with Interfaces;
+use type Interfaces.Unsigned_8;
+
+package body Security_Policy is
 
    function Is_Valid_DRAM_Range (
       Base : Memory_Address;
       Size : Region_Size
    ) return Boolean is
    begin
-      -- Checks if the requested region falls strictly within the MT6761's 2GB DRAM
-      if Base >= DRAM_Base and then 
-         (Base + Memory_Address(Size)) <= (DRAM_Base + Memory_Address(DRAM_Size)) 
+      -- Check the requested region falls within the MT6761's 2GB DRAM.
+      -- Subtraction and short-circuiting prevent modular wrap-around.
+      if Base >= DRAM_Base
+        and then Memory_Address (Size) <=
+          (DRAM_Base + Memory_Address (DRAM_Size)) - Base
       then
          return True;
       else
@@ -16,14 +21,17 @@ package body Security_Policy with SPARK_Mode => On is
    end Is_Valid_DRAM_Range;
 
    function Validate_Stage2_Access (
-      VM_ID     : Interfaces.Unsigned_8;
-      Target    : Memory_Address;
-      Length    : Region_Size
+      VM_ID  : Interfaces.Unsigned_8;
+      Target : Memory_Address;
+      Length : Region_Size
    ) return Boolean is
    begin
-      -- Base security check: Ensure the guest isn't trying to map 
-      -- memory outside the physical MT6761 DRAM boundaries.
-      -- Future iterations will add logic here to map specific regions to specific VM_IDs.
+      -- Validate the VM ID.
+      if VM_ID >= Max_VMs then
+         return False;
+      end if;
+
+      -- Validate physical memory bounds.
       return Is_Valid_DRAM_Range (Base => Target, Size => Length);
    end Validate_Stage2_Access;
 

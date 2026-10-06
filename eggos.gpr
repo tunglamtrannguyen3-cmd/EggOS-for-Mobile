@@ -1,8 +1,10 @@
 project EggOS is
-   for Source_Dirs use ("hypervisor/safety");
+   -- Added "boot" for Bootloader/Panic_Handler and "drivers" for UART
+   for Source_Dirs use ("hypervisor/safety", "boot", "drivers");
    for Object_Dir use "build/obj";
 
    package Compiler is
+      -- -gnatp suppresses all checks (ideal for bare-metal before you've set up fault handlers)
       for Default_Switches ("Ada") use ("-O2", "-gnatp");
    end Compiler;
 end EggOS;

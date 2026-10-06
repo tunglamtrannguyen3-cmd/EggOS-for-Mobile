@@ -4,6 +4,6 @@ version = "0.1.0"
 edition = "2021"
 
 [[bin]]
-name = "hypervisor"
-path = "core/main.rs"
+name = "guest"
+path = "main.rs"
 harness = false

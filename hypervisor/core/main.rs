@@ -1,18 +1,18 @@
 #![no_std]
 #![no_main]
 
-use core::panic::PanicInfo;
+// Re-export the FFI bridge so it gets bundled into libhypervisor.a 
+// and the Ada bootloader can find it.
+pub use drivers::uart::eggos_uart_put_char;
 
 #[no_mangle]
 pub extern "C" fn hypervisor_main() -> ! {
     loop {
-        core::hint::spin_loop();
+        unsafe { core::arch::asm!("wfe") };
     }
 }
 
 #[panic_handler]
-fn panic(_info: &PanicInfo) -> ! {
-    loop {
-        core::hint::spin_loop();
-    }
+fn panic(_info: &core::panic::PanicInfo) -> ! {
+    loop {}
 }

@@ -1,29 +1,31 @@
 /*
- * eggos full boot entry. AArch64 reset / chainload vector for MT6761.
+ * eggos boot entry. AArch64 reset vector for MT6761.
  *
- * Assumes the preloader already brought up clocks and DRAM.
- * Link address is 0x40080000 (boot/linker.ld).
+ * Chainload payload. Clocks and DRAM are already up.
+ * Link address: 0x40080000 (boot/linker.ld).
  *
- * Entry contract with bootloader.rs:
- *   x0 on entry     DTB physical address (Linux / LK boot protocol)
- *   dtb_ptr         published after BSS clear, read by Rust
- *   bootloader_main noreturn Rust entry
+ * Ada contract, C ABI, no GNAT mangling:
  *
- * Core 0 owns init. Cores 1-3 spin on secondary_release until core 0
- * writes a jump address there.
+ *   Dtb_Ptr : Interfaces.Unsigned_64
+ *     with Import, Convention => C, External_Name => "dtb_ptr";
+ *
+ *   procedure Bootloader_Main
+ *     with Export, Convention => C, External_Name => "bootloader_main";
+ *
+ * x0 on entry is the DTB. Core 0 publishes it, runs adainit, then
+ * calls Bootloader_Main. Cores 1-3 wait on secondary_release.
  */
 
 .section .text.boot, "ax"
 .global _start
 .type _start, %function
 
-.equ UART0,     0x11002000
-.equ UART_THR,  0x00
-.equ UART_LSR,  0x14
+.equ UART0,    0x11002000
+.equ UART_THR, 0x00
+.equ UART_LSR, 0x14
 
 _start:
-    /* Stash DTB before any instruction clobbers x0. */
-    mov     x19, x0
+    mov     x19, x0                 /* DTB, before anything clobbers x0 */
 
     mrs     x9, mpidr_el1
     and     x9, x9, #0xff
@@ -38,10 +40,9 @@ _start:
     b       halt
 
 drop_el3:
-    /* Non-secure AArch64 EL2. HCE so EL2 can take its own IRQs later. */
-    mov     x0, #((1 << 10) | (1 << 8) | (1 << 0))  /* RW | HCE | NS */
+    mov     x0, #((1 << 10) | (1 << 8) | (1 << 0))  /* SCR_EL3: RW | HCE | NS */
     msr     scr_el3, x0
-    mov     x0, #0x3c9              /* DAIF masked, M[4]=0, EL2h */
+    mov     x0, #0x3c9              /* DAIF masked, EL2h */
     msr     spsr_el3, x0
     adr     x0, at_el2
     msr     elr_el3, x0
@@ -51,11 +52,9 @@ drop_el3:
 at_el2:
     msr     daifset, #0xf
 
-    /* EL1 is AArch64. Stage-2 (VM) stays off until the host installs it. */
-    mov     x0, #(1 << 31)          /* HCR_EL2.RW */
+    mov     x0, #(1 << 31)          /* HCR_EL2.RW: EL1 is AArch64 */
     msr     hcr_el2, x0
 
-    /* I-cache on. MMU, D-cache, alignment check, endian swap off. */
     mrs     x0, sctlr_el2
     orr     x0, x0, #(1 << 12)      /* I */
     bic     x0, x0, #(1 << 0)       /* M */
@@ -79,19 +78,25 @@ at_el2:
     adr     x0, banner
     bl      uart_puts
 
-    /* BSS clear wiped dtb_ptr. Publish the stashed DTB, then enter Rust. */
     ldr     x0, =dtb_ptr
     str     x19, [x0]
+
+    ldr     x0, =adainit            /* weak: 0 if the binder is not linked */
+    cbz     x0, no_elab
+    blr     x0
+no_elab:
     bl      bootloader_main
+    ldr     x0, =adafinal
+    cbz     x0, halt
+    blr     x0
     b       halt
 
-/* Cores 1-3. core 0 writes an entry PC to secondary_release. */
 secondary_park:
     ldr     x1, =secondary_release
-1:
+wait_release:
     wfe
     ldr     x0, [x1]
-    cbz     x0, 1b
+    cbz     x0, wait_release
     br      x0
 
 halt:
@@ -104,23 +109,21 @@ halt:
 clear_bss:
     ldr     x0, =_bss_start
     ldr     x1, =_bss_end
-2:
+bss_loop:
     cmp     x0, x1
-    b.hs    3f
+    b.hs    bss_done
     str     xzr, [x0], #8
-    b       2b
-3:
+    b       bss_loop
+bss_done:
     ret
 .size clear_bss, . - clear_bss
-
-/* MT6577-compatible UART0 at 0x11002000. Polling, 8-bit writes. */
 
 .type uart_putc, %function
 uart_putc:
     ldr     x1, =UART0
-4:
+uart_wait:
     ldr     w2, [x1, #UART_LSR]
-    tbz     w2, #5, 4b              /* LSR.THRE */
+    tbz     w2, #5, uart_wait
     str     w0, [x1, #UART_THR]
     ret
 .size uart_putc, . - uart_putc
@@ -129,20 +132,19 @@ uart_putc:
 uart_puts:
     stp     x29, x30, [sp, #-32]!
     stp     x19, x20, [sp, #16]
-    mov     x29, sp
     mov     x20, x0
-5:
+puts_loop:
     ldrb    w0, [x20], #1
-    cbz     w0, 6f
+    cbz     w0, puts_done
     cmp     w0, #'\n'
-    b.ne    7f
+    b.ne    puts_raw
     mov     w0, #'\r'
     bl      uart_putc
     mov     w0, #'\n'
-7:
+puts_raw:
     bl      uart_putc
-    b       5b
-6:
+    b       puts_loop
+puts_done:
     ldp     x19, x20, [sp, #16]
     ldp     x29, x30, [sp], #32
     ret
@@ -150,7 +152,7 @@ uart_puts:
 
 .section .rodata
 banner:
-    .asciz "eggos: el2 entry\n"
+    .asciz "eggos: ada entry\n"
 trap_msg:
     .asciz "eggos: el2 trap\n"
 
@@ -164,10 +166,9 @@ dtb_ptr:
 secondary_release:
     .quad 0
 
-/*
- * EL2 vector table. 16 slots, each 0x80 bytes, table 2 KiB aligned.
- * VBAR_EL2 points here. Stubs print and halt; the host can replace them.
- */
+.weak adainit
+.weak adafinal
+
 .section .text.vectors, "ax"
 .align 11
 .global el2_vectors

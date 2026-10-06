@@ -3,7 +3,12 @@ name = "hypervisor"
 version = "0.1.0"
 edition = "2021"
 
-[[bin]]
+[lib]
 name = "hypervisor"
 path = "core/main.rs"
-harness = false
+crate-type = ["staticlib"] # This will now bundle the drivers crate inside it!
+test = false
+doctest = false
+
+[dependencies]
+drivers = { path = "../drivers" }

@@ -1,8 +1,8 @@
 [workspace]
 members = [
-    "boot",
     "hypervisor",
-    "guest"
+    "guest",
+    "drivers"
 ]
 resolver = "2"
 
