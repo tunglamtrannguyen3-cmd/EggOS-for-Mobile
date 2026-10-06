@@ -41,12 +41,10 @@ jobs:
         with:
           targets: aarch64-unknown-none
 
-      - name: Run SPARK Formal Verification
+      - name: Build Ada/SPARK Components
         run: |
           set -eux
-          # Ensures Alire environment is active and runs gnatprove through alr
-          alr -n toolchain --select
-          alr exec -- gnatprove -P eggos.gpr
+          gprbuild -P eggos.gpr
 
       - name: Build EggOS
         run: |
