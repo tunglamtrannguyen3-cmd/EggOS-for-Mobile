@@ -1,31 +1,46 @@
 # Toolchain configuration for bare-metal AArch64
 CROSS_COMPILE ?= aarch64-none-elf-
-AS            := $(CROSS_COMPILE)as
+CC            := $(CROSS_COMPILE)gcc
+LD            := $(CROSS_COMPILE)ld
 OBJCOPY       := $(CROSS_COMPILE)objcopy
 
 TARGET_TRIPLE := aarch64-unknown-none
 BUILD_DIR     := build
+OBJ_DIR       := $(BUILD_DIR)/obj
 
-.PHONY: all clean asm ada rust binary
+LINKER_SCRIPT := boot/linker.ld
+RUST_LIB      := target/$(TARGET_TRIPLE)/release/libhypervisor.a
+ELF           := $(BUILD_DIR)/eggos.elf
+BIN           := $(BUILD_DIR)/eggos.bin
+
+.PHONY: all clean asm ada rust elf binary
 
 all: binary
 
-# 1. Assemble early boot entry (Grok's Assembly stub)
+# 1. Assemble early boot entry (uses GCC preprocessor for boot/entry.S)
 asm:
-	@mkdir -p $(BUILD_DIR)
-	$(AS) -c boot/entry.S -o $(BUILD_DIR)/entry.o
+	@mkdir -p $(OBJ_DIR)
+	$(CC) -c boot/entry.S -o $(OBJ_DIR)/entry.o -ffreestanding -mcpu=cortex-a53
 
 # 2. Compile Ada/SPARK security verification code
 ada:
-	gprbuild --target=aarch64-linux-gnu -P eggos.gpr
-# 3. Build Rust crates
+	gprbuild -P eggos.gpr
+
+# 3. Build Rust crates (bundles drivers + hypervisor into libhypervisor.a)
 rust:
 	cargo build --target $(TARGET_TRIPLE) --release
 
-# 4. Extract raw binary image for MT6761 preloader/brom
-binary: asm ada rust
-	@mkdir -p $(BUILD_DIR)
-	$(OBJCOPY) -O binary target/$(TARGET_TRIPLE)/release/boot $(BUILD_DIR)/eggos.bin
+# 4. Link Assembly, Ada object files, and Rust static library into ELF
+elf: asm ada rust
+	$(LD) -T $(LINKER_SCRIPT) \
+		$(OBJ_DIR)/entry.o \
+		$$(find $(OBJ_DIR) -name "*.o" ! -name "entry.o") \
+		$(RUST_LIB) \
+		-o $(ELF)
+
+# 5. Extract raw binary image for MT6761 preloader
+binary: elf
+	$(OBJCOPY) -O binary $(ELF) $(BIN)
 
 clean:
 	cargo clean

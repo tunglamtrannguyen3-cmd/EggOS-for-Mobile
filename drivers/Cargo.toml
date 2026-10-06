@@ -8,3 +8,4 @@ name = "drivers"
 path = "lib.rs"
 test = false
 doctest = false
+bench = false

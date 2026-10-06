@@ -6,9 +6,10 @@ edition = "2021"
 [lib]
 name = "hypervisor"
 path = "core/main.rs"
-crate-type = ["staticlib"] # This will now bundle the drivers crate inside it!
+crate-type = ["staticlib"]
 test = false
 doctest = false
+bench = false
 
 [dependencies]
 drivers = { path = "../drivers" }
