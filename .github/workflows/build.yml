@@ -21,10 +21,10 @@ jobs:
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
             build-essential \
             curl \
-            ca-certificates \
-            gnat \
-            gprbuild \
-            gnatprove
+            ca-certificates
+
+      - name: Set up Alire (Ada/SPARK Package Manager)
+        uses: alire-project/setup-alire@latest
 
       - name: Install ARM bare-metal GNU toolchain
         run: |
@@ -44,7 +44,9 @@ jobs:
       - name: Run SPARK Formal Verification
         run: |
           set -eux
-          make prove
+          # Ensures Alire environment is active and runs gnatprove through alr
+          alr -n toolchain --select
+          alr exec -- gnatprove -P eggos.gpr
 
       - name: Build EggOS
         run: |
