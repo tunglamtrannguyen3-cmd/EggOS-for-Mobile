@@ -6,8 +6,5 @@ authors = ["Eggchese <tunglamtrannguyen3@gmail.com>"]
 maintainers = ["Eggchese <tunglamtrannguyen3@gmail.com>"]
 website = "https://github.com/tunglamtrannguyen3-cmd/EggOS-for-Mobile"
 tags = ["embedded", "os", "aarch64", "bare-metal"]
-<<<<<<< HEAD
 project-files = ["eggos.gpr"]
-=======
-project-files = ["eggos.gpr"]
->>>>>>> 63fb5adbef3f36eb284b07d25dd8beaf9f31c51c
+
