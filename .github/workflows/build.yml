@@ -22,7 +22,9 @@ jobs:
             build-essential \
             curl \
             ca-certificates \
-            gnat gprbuild
+            gnat \
+            gprbuild \
+            gnatprove
 
       - name: Install ARM bare-metal GNU toolchain
         run: |
@@ -38,6 +40,11 @@ jobs:
         uses: dtolnay/rust-toolchain@nightly
         with:
           targets: aarch64-unknown-none
+
+      - name: Run SPARK Formal Verification
+        run: |
+          set -eux
+          make prove
 
       - name: Build EggOS
         run: |
