@@ -1,7 +1,7 @@
 name = "eggos"
 description = "Bare-metal mobile operating system with Ada/SPARK safety components"
 version = "0.1.0"
-licenses = ["MIT"]
+licenses = ["custom-EOPL"]
 authors = ["tunglamtrannguyen3-cmd"]
 maintainers = ["tunglamtrannguyen3-cmd"]
 website = "https://github.com/tunglamtrannguyen3-cmd/EggOS-for-Mobile"
