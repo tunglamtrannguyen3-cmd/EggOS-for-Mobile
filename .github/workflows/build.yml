@@ -14,15 +14,25 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install ARM64 cross toolchain
+      - name: Install build dependencies
         run: |
           set -eux
           sudo apt-get update
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
             build-essential \
-            gcc-aarch64-linux-gnu \
-            binutils-aarch64-linux-gnu \
+            curl \
+            ca-certificates \
             gnat gprbuild
+
+      - name: Install ARM bare-metal GNU toolchain
+        run: |
+          set -eux
+          mkdir -p /opt/arm-gnu
+          curl -L \
+            -o /tmp/arm-gnu-toolchain.tar.xz \
+            "https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-x86_64-aarch64-none-elf.tar.xz"
+          tar -C /opt/arm-gnu -xJf /tmp/arm-gnu-toolchain.tar.xz --strip-components=1
+          echo "/opt/arm-gnu/bin" >> "$GITHUB_PATH"
 
       - name: Install Rust Nightly Toolchain
         uses: dtolnay/rust-toolchain@nightly
@@ -32,7 +42,9 @@ jobs:
       - name: Build EggOS
         run: |
           set -eux
-          make CROSS_COMPILE=aarch64-linux-gnu- -j"$(nproc)"
+          which aarch64-none-elf-gcc
+          which aarch64-none-elf-ld
+          make CROSS_COMPILE=aarch64-none-elf- -j"$(nproc)"
           ls -lh build
           test -f build/eggos.bin
 
