@@ -14,15 +14,15 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install cross toolchains
+      - name: Install ARM64 cross toolchain
         run: |
           set -eux
           sudo apt-get update
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
             build-essential \
-            gnat gprbuild \
-            gcc-aarch64-none-elf \
-            binutils-aarch64-none-elf
+            gcc-aarch64-linux-gnu \
+            binutils-aarch64-linux-gnu \
+            gnat gprbuild
 
       - name: Install Rust Nightly Toolchain
         uses: dtolnay/rust-toolchain@nightly
@@ -32,8 +32,8 @@ jobs:
       - name: Build EggOS
         run: |
           set -eux
-          make CROSS_COMPILE=aarch64-none-elf- -j"$(nproc)"
-          ls -l build
+          make CROSS_COMPILE=aarch64-linux-gnu- -j"$(nproc)"
+          ls -lh build
           test -f build/eggos.bin
 
       - name: Upload Raw Binary
