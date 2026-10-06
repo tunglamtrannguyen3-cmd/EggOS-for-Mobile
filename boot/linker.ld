@@ -1,48 +1,54 @@
 ENTRY(_start)
 
-/* MT6761 DRAM starts at 0x4000_0000. 
-   We load at an offset so we don't overwrite early firmware. */
+/* MT6761 DRAM starts at 0x40000000.
+   Load at an offset so this image does not overwrite early firmware. */
 BASE_ADDRESS = 0x40080000;
 
 SECTIONS
 {
     . = BASE_ADDRESS;
 
-    /* 1. BOOT ENTRY POINT */
-    /* This must be the very first thing in the binary. */
-    /* The KEEP directive ensures the linker doesn't optimize it away. */
+    /* Reset code. Must be first. */
     .text.boot : {
         KEEP(*(.text.boot))
     }
 
-    /* 2. EXECUTABLE CODE (Ada & Rust) */
+    /* EL2 vector table. entry.S aligns it to 2 KiB. Keep it out of .text. */
+    .text.vectors : ALIGN(2048) {
+        KEEP(*(.text.vectors))
+    }
+
     .text : {
         *(.text .text.*)
     }
 
-    /* 3. READ-ONLY DATA (Strings, constants, etc.) */
     .rodata : {
         *(.rodata .rodata.*)
     }
 
-    /* 4. INITIALIZED DATA */
     .data : {
         *(.data .data.*)
     }
 
-    /* 5. UNINITIALIZED DATA (BSS) */
-    /* We mark the start and end so your entry.S can zero this memory out before calling Ada */
+    /* Names match clear_bss in entry.S: _bss_start / _bss_end. */
     .bss (NOLOAD) : ALIGN(8) {
-        __bss_start = .;
+        _bss_start = .;
         *(.bss .bss.*)
         *(COMMON)
-        __bss_end = .;
+        . = ALIGN(16);
+        _bss_end = .;
     }
 
-    /* 6. DISCARD SECTION */
-    /* Strip out standard unwinding/exception info to keep the binary small */
+    /* entry.S does: ldr x0, =_stack_top; mov sp, x0 */
+    . = ALIGN(16);
+    _stack_bottom = .;
+    . += 64K;
+    _stack_top = .;
+
     /DISCARD/ : {
         *(.eh_frame)
         *(.eh_frame_hdr)
+        *(.comment)
+        *(.note.*)
     }
 }
