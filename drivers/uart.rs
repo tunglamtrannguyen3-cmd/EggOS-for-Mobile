@@ -1,6 +1,8 @@
 use core::fmt::{self, Write};
 
 pub const UART0_BASE: usize = 0x1100_2000;
+const UART_LSR_OFFSET: usize = 0x14;
+const UART_LSR_THR_EMPTY: u8 = 1 << 5;
 
 pub struct Uart {
     base_address: usize,
@@ -13,10 +15,13 @@ impl Uart {
 
     /// Writes a single byte directly to the UART TX register
     pub fn write_byte(&self, byte: u8) {
-        let ptr = self.base_address as *mut u8;
+        let status = (self.base_address + UART_LSR_OFFSET) as *const u8;
+        let tx = self.base_address as *mut u8;
         unsafe {
-            // Volatile write ensures the compiler doesn't optimize away the hardware interaction
-            core::ptr::write_volatile(ptr, byte);
+            while core::ptr::read_volatile(status) & UART_LSR_THR_EMPTY == 0 {
+                core::hint::spin_loop();
+            }
+            core::ptr::write_volatile(tx, byte);
         }
     }
 }
@@ -25,6 +30,9 @@ impl Uart {
 impl Write for Uart {
     fn write_str(&mut self, s: &str) -> fmt::Result {
         for byte in s.bytes() {
+            if byte == b'\n' {
+                self.write_byte(b'\r');
+            }
             self.write_byte(byte);
         }
         Ok(())

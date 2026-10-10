@@ -22,19 +22,19 @@ asm:
 	@mkdir -p $(OBJ_DIR)
 	$(CC) -c boot/entry.S -o $(OBJ_DIR)/entry.o -ffreestanding -mcpu=cortex-a53
 
-# 2. Compile Ada/SPARK security verification code
+# Compile Ada/SPARK components for host-side checks. These objects are not
+# included in the firmware until an AArch64 GNAT toolchain is configured.
 ada:
 	gprbuild -P eggos.gpr
 
-# 3. Build Rust crates (bundles drivers + hypervisor into libhypervisor.a)
+# Build Rust crates (bundles drivers + hypervisor into libhypervisor.a)
 rust:
-	cargo build --target $(TARGET_TRIPLE) --release
+	cargo build -p hypervisor --target $(TARGET_TRIPLE) --release
 
-# 4. Link Assembly, Ada object files, and Rust static library into ELF
-elf: asm ada rust
+# Link the AArch64 entry point and Rust static library into the firmware ELF.
+elf: asm rust
 	$(LD) -T $(LINKER_SCRIPT) \
 		$(OBJ_DIR)/entry.o \
-		$$(find $(OBJ_DIR) -name "*.o" ! -name "entry.o") \
 		$(RUST_LIB) \
 		-o $(ELF)
 

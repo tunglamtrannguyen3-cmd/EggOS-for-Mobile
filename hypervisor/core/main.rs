@@ -8,11 +8,12 @@ use drivers::uart::{Uart, UART0_BASE};
 pub use drivers::uart::eggos_uart_put_char;
 
 #[no_mangle]
-pub extern "C" fn hypervisor_main() -> ! {
+pub extern "C" fn hypervisor_main(dtb_addr: u64) -> ! {
     let mut serial = Uart::new(UART0_BASE);
     
-    // If you see this, the Assembly -> Ada -> Rust boot chain works!
+    // If this appears, the firmware reached Rust from the assembly entry point.
     let _ = writeln!(serial, "[Rust] Hypervisor Core initialized at EL2.");
+    let _ = writeln!(serial, "[Rust] DTB address: {:#x}", dtb_addr);
     let _ = writeln!(serial, "[Rust] Awaiting guest OS handoff...");
 
     // Halt the CPU for now until we write the VM scheduler
