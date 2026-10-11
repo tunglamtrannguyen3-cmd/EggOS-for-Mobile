@@ -1,10 +1,21 @@
-# Toolchain configuration for bare-metal AArch64
+# Toolchain configuration for bare-metal AArch64.
+# Prefer a real GNU cross toolchain when present, but fall back to LLVM tooling
+# so the project can still build in environments without the custom GCC bundle.
 CROSS_COMPILE ?= aarch64-none-elf-
-CC            := $(CROSS_COMPILE)gcc
-LD            := $(CROSS_COMPILE)ld
-OBJCOPY       := $(CROSS_COMPILE)objcopy
+TARGET_TRIPLE ?= aarch64-unknown-none
 
-TARGET_TRIPLE := aarch64-unknown-none
+ifeq ($(shell command -v "$(CROSS_COMPILE)gcc" >/dev/null 2>&1 && echo yes || echo no),yes)
+CC      := $(CROSS_COMPILE)gcc
+LD      := $(CROSS_COMPILE)ld
+OBJCOPY := $(CROSS_COMPILE)objcopy
+ASMFLAGS := -ffreestanding -mcpu=cortex-a53
+else
+CC      := clang
+LD      := ld.lld
+OBJCOPY := llvm-objcopy
+ASMFLAGS := --target=$(TARGET_TRIPLE) -ffreestanding -mcpu=cortex-a53
+endif
+
 BUILD_DIR     := build
 OBJ_DIR       := $(BUILD_DIR)/obj
 
@@ -17,10 +28,11 @@ BIN           := $(BUILD_DIR)/eggos.bin
 
 all: binary
 
-# 1. Assemble early boot entry (uses GCC preprocessor for boot/entry.S)
+# Assemble the bare-metal entry point. Most toolchains expose it as either
+# aarch64-none-elf-gcc or clang with a matching AArch64 target triple.
 asm:
 	@mkdir -p $(OBJ_DIR)
-	$(CC) -c boot/entry.S -o $(OBJ_DIR)/entry.o -ffreestanding -mcpu=cortex-a53
+	$(CC) -c boot/entry.S -o $(OBJ_DIR)/entry.o $(ASMFLAGS)
 
 # Compile Ada/SPARK components for host-side checks. These objects are not
 # included in the firmware until an AArch64 GNAT toolchain is configured.
