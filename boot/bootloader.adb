@@ -1,20 +1,19 @@
-package body Bootloader is
+with Interfaces;
 
-   -- Import the Rust hypervisor entry point
+package body Bootloader
+  with SPARK_Mode => On
+is
+
    procedure Hypervisor_Main
      with Import        => True,
           Convention    => C,
           External_Name => "hypervisor_main",
-          No_Return     => True;
+          Global        => null,
+          No_Return;
 
    procedure Main (DTB_Addr : Interfaces.Unsigned_64) is
       pragma Unreferenced (DTB_Addr);
    begin
-      -- 1. Initialize EL2 (Hypervisor Mode)
-      -- 2. Setup initial page tables
-      -- 3. Verify security policies
-      
-      -- 4. Hand off execution to the Rust hypervisor
       Hypervisor_Main;
    end Main;
 

@@ -1,14 +1,15 @@
+with Drivers.UART;
 with System;
 
-package Panic_Handler is
+package Panic_Handler
+  with SPARK_Mode => On
+is
 
-   -- This procedure overrides the default Ada runtime panic behavior.
-   -- The compiler automatically looks for the "__gnat_last_chance_handler" symbol 
-   -- when an exception occurs in a No_Run_Time (bare-metal) environment.
    procedure Last_Chance_Handler (Msg : System.Address; Line : Integer)
-     with Export        => True, 
-          Convention    => C, 
+     with Export        => True,
+          Convention    => C,
           External_Name => "__gnat_last_chance_handler",
+          Global        => (Output => Drivers.UART.Port),
           No_Return     => True;
 
 end Panic_Handler;

@@ -1,21 +1,19 @@
 with Drivers.UART;
+with System;
 
-package body Panic_Handler is
+package body Panic_Handler
+  with SPARK_Mode => On
+is
 
    procedure Last_Chance_Handler (Msg : System.Address; Line : Integer) is
+      pragma Unreferenced (Msg);
+      pragma Unreferenced (Line);
    begin
-      -- Re-initialize UART in case the panic happened early or corrupted state
       Drivers.UART.Initialize (Drivers.UART.UART0_BASE);
-
-      Drivers.UART.Put_Line ("");
-      Drivers.UART.Put_Line ("┌─────────────────────────────────────────────────────────────┐");
-      Drivers.UART.Put_Line ("│ 🚨 KERNEL PANIC                                             │");
-      Drivers.UART.Put_Line ("├─────────────────────────────────────────────────────────────┤");
-      Drivers.UART.Put_Line ("└─────────────────────────────────────────────────────────────┘");
+      Drivers.UART.Put_Line ("KERNEL PANIC");
       Drivers.UART.Put_Line ("SYSTEM HALTED.");
-
       loop
-         pragma Loop_Optimize (No_Unroll);
+         null;
       end loop;
    end Last_Chance_Handler;
 
