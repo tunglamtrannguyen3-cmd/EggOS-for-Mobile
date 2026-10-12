@@ -1,8 +1,10 @@
-# Toolchain configuration for bare-metal AArch64.
-# Prefer a real GNU cross toolchain when present, but fall back to LLVM tooling
-# so the project can still build in environments without the custom GCC bundle.
+# Toolchain. Prefer aarch64-none-elf-gcc, fall back to clang.
+#   make              phone: entry.S + linker.ld
+#   make BOARD=qemu   virt:  entry-qemu.S + uart-qemu.S + vectors.S
+
 CROSS_COMPILE ?= aarch64-none-elf-
 TARGET_TRIPLE ?= aarch64-unknown-none
+BOARD         ?= mt6761
 
 ifeq ($(shell command -v "$(CROSS_COMPILE)gcc" >/dev/null 2>&1 && echo yes || echo no),yes)
 CC      := $(CROSS_COMPILE)gcc
@@ -16,43 +18,61 @@ OBJCOPY := llvm-objcopy
 ASMFLAGS := --target=$(TARGET_TRIPLE) -ffreestanding -mcpu=cortex-a53
 endif
 
-BUILD_DIR     := build
-OBJ_DIR       := $(BUILD_DIR)/obj
+BUILD_DIR := build
+OBJ_DIR   := $(BUILD_DIR)/obj
+RUST_LIB  := target/$(TARGET_TRIPLE)/release/libhypervisor.a
+ELF       := $(BUILD_DIR)/eggos.elf
+BIN       := $(BUILD_DIR)/eggos.bin
 
+ifeq ($(BOARD),qemu)
+ENTRY         := boot/entry-qemu.S
+UART          := boot/uart-qemu.S
+LINKER_SCRIPT := boot/linker-qemu.ld
+else
+ENTRY         := boot/entry.S
+UART          :=
 LINKER_SCRIPT := boot/linker.ld
-RUST_LIB      := target/$(TARGET_TRIPLE)/release/libhypervisor.a
-ELF           := $(BUILD_DIR)/eggos.elf
-BIN           := $(BUILD_DIR)/eggos.bin
+endif
 
-.PHONY: all clean asm ada rust elf binary
+.PHONY: all clean asm ada rust elf binary qemu
 
 all: binary
 
-# Assemble the bare-metal entry point. Most toolchains expose it as either
-# aarch64-none-elf-gcc or clang with a matching AArch64 target triple.
 asm:
 	@mkdir -p $(OBJ_DIR)
-	$(CC) -c boot/entry.S -o $(OBJ_DIR)/entry.o $(ASMFLAGS)
+	$(CC) -c $(ENTRY) -o $(OBJ_DIR)/entry.o $(ASMFLAGS)
+	$(CC) -c boot/vectors.S -o $(OBJ_DIR)/vectors.o $(ASMFLAGS)
+ifneq ($(UART),)
+	$(CC) -c $(UART) -o $(OBJ_DIR)/uart.o $(ASMFLAGS)
+endif
 
-# Compile Ada/SPARK components for host-side checks. These objects are not
-# included in the firmware until an AArch64 GNAT toolchain is configured.
 ada:
 	gprbuild -P eggos.gpr
 
-# Build Rust crates (bundles drivers + hypervisor into libhypervisor.a)
 rust:
 	cargo build -p hypervisor --target $(TARGET_TRIPLE) --release
 
-# Link the AArch64 entry point and Rust static library into the firmware ELF.
 elf: asm rust
+ifeq ($(BOARD),qemu)
 	$(LD) -T $(LINKER_SCRIPT) \
 		$(OBJ_DIR)/entry.o \
+		$(OBJ_DIR)/uart.o \
+		$(OBJ_DIR)/vectors.o \
 		$(RUST_LIB) \
 		-o $(ELF)
+else
+	$(LD) -T $(LINKER_SCRIPT) \
+		$(OBJ_DIR)/entry.o \
+		$(OBJ_DIR)/vectors.o \
+		$(RUST_LIB) \
+		-o $(ELF)
+endif
 
-# 5. Extract raw binary image for MT6761 preloader
 binary: elf
 	$(OBJCOPY) -O binary $(ELF) $(BIN)
+
+qemu:
+	$(MAKE) BOARD=qemu binary
 
 clean:
 	cargo clean
