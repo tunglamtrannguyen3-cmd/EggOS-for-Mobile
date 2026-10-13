@@ -1,6 +1,7 @@
 /*
  * QEMU virt reset. UART is boot/uart-qemu.S. Vectors are boot/vectors.S.
- * Same handoff as entry.S.
+ * Handoff matches entry.S: hypervisor_main.
+ * The QEMU link does not include the Ada object.
  */
 
 .section .text.boot, "ax"
@@ -61,14 +62,9 @@ at_el2:
 
     ldr     x0, =dtb_ptr
     str     x19, [x0]
-    ldr     x0, =adainit
-    cbz     x0, no_elab
-    blr     x0
-no_elab:
-    bl      bootloader_main
-    ldr     x0, =adafinal
-    cbz     x0, halt
-    blr     x0
+
+    mov     x0, x19
+    bl      hypervisor_main
     b       halt
 
 secondary_park:
@@ -110,6 +106,3 @@ dtb_ptr:
 .global secondary_release
 secondary_release:
     .quad 0
-
-.weak adainit
-.weak adafinal
