@@ -6,10 +6,16 @@
  *
  * x0 on entry is the DTB. Core 0 publishes it and calls the Rust
  * hypervisor entry point. Cores 1-3 wait on secondary_release.
+ *
+ * The EL2 table is boot/vectors.S. UART helpers are global so that
+ * table can call them.
  */
 
 .section .text.boot, "ax"
 .global _start
+.global halt
+.global uart_putc
+.global uart_puts
 .type _start, %function
 
 .equ UART0,    0x11002000
@@ -61,7 +67,7 @@ at_el2:
     ldr     x0, =_stack_top
     mov     sp, x0
 
-    adr     x0, el2_vectors
+    ldr     x0, =el2_vectors
     msr     vbar_el2, x0
     isb
 
@@ -139,8 +145,6 @@ puts_done:
 .section .rodata
 banner:
     .asciz "eggos: ada entry\n"
-trap_msg:
-    .asciz "eggos: el2 trap\n"
 
 .section .bss
 .align 3
@@ -151,44 +155,3 @@ dtb_ptr:
 .global secondary_release
 secondary_release:
     .quad 0
-
-.section .text.vectors, "ax"
-.align 11
-.global el2_vectors
-el2_vectors:
-    b       el2_unhandled           /* Current EL, SP0, sync */
-    .align 7
-    b       el2_unhandled           /* IRQ */
-    .align 7
-    b       el2_unhandled           /* FIQ */
-    .align 7
-    b       el2_unhandled           /* SError */
-    .align 7
-    b       el2_unhandled           /* Current EL, SPx, sync */
-    .align 7
-    b       el2_unhandled
-    .align 7
-    b       el2_unhandled
-    .align 7
-    b       el2_unhandled
-    .align 7
-    b       el2_unhandled           /* Lower EL, AArch64, sync */
-    .align 7
-    b       el2_unhandled
-    .align 7
-    b       el2_unhandled
-    .align 7
-    b       el2_unhandled
-    .align 7
-    b       el2_unhandled           /* Lower EL, AArch32, sync */
-    .align 7
-    b       el2_unhandled
-    .align 7
-    b       el2_unhandled
-    .align 7
-    b       el2_unhandled
-
-el2_unhandled:
-    adr     x0, trap_msg
-    bl      uart_puts
-    b       halt
