@@ -48,18 +48,38 @@ jobs:
           set -eux
           gprbuild -P eggos.gpr
 
-      - name: Build EggOS
+      - name: Build phone image
         run: |
           set -eux
-          which aarch64-none-elf-gcc
-          which aarch64-none-elf-ld
           make CROSS_COMPILE=aarch64-none-elf- -j"$(nproc)"
-          ls -lh build
-          test -f build/eggos.bin
+          cp build/eggos.elf build/eggos-phone.elf
+          cp build/eggos.bin build/eggos-phone.bin
+          ls -lh build/eggos-phone.bin
+          test -f build/eggos-phone.bin
 
-      - name: Upload Raw Binary
+      - name: Build QEMU image
+        run: |
+          set -eux
+          make CROSS_COMPILE=aarch64-none-elf- BOARD=qemu -j"$(nproc)"
+          cp build/eggos.elf build/eggos-qemu.elf
+          cp build/eggos.bin build/eggos-qemu.bin
+          ls -lh build/eggos-qemu.bin
+          test -f build/eggos-qemu.bin
+
+      - name: Upload phone binary
         uses: actions/upload-artifact@v4
         with:
-          name: eggos-binary
-          path: build/eggos.bin
+          name: eggos-phone
+          path: |
+            build/eggos-phone.elf
+            build/eggos-phone.bin
+          if-no-files-found: error
+
+      - name: Upload QEMU binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: eggos-qemu
+          path: |
+            build/eggos-qemu.elf
+            build/eggos-qemu.bin
           if-no-files-found: error
